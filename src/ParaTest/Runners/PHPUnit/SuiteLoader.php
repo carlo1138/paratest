@@ -109,10 +109,18 @@ class SuiteLoader
      */
     private function initSuites()
     {
-        foreach ($this->files as $path) {
+        foreach ($this->files as $i => $path) {
             try {
                 $parser = new Parser($path);
                 if ($class = $parser->getClass()) {
+                    if ($this->options->groups) {
+                        $classGroups = $this->methodGroups($class);
+                        if (!$this->testMatchGroupOptions($classGroups)) {
+                            unset($this->files[$i]);
+
+                            continue;
+                        }
+                    }
                     $this->loadedSuites[$path] = $this->createSuite($path, $class);
                 }
             } catch (NoClassInFileException $e) {
