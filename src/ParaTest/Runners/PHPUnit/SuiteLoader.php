@@ -127,6 +127,26 @@ class SuiteLoader
                 continue;
             }
         }
+        if (!empty($this->options->chunk)) {
+            $this->splitLoadedSuitesByChunk();
+        }
+    }
+
+    private function splitLoadedSuitesByChunk()
+    {
+        list($current,$chunks) = explode('/', $this->options->chunk);
+        if (empty($current) || empty($chunks)) {
+            throw new \Exception('Invalid chunk format');
+        }
+        $current--;
+        if ($current < 0) {
+            throw new \Exception('Invalid current chunk');
+        }
+        $tmp = array_chunk($this->loadedSuites, ceil(count($this->loadedSuites)/$chunks), true);
+        if (count($tmp) < $chunks) {
+            throw new \Exception('Invalid chunks: too few tests to slit');
+        }
+        $this->loadedSuites = $tmp[$current];
     }
 
     private function executableTests($path, $class)

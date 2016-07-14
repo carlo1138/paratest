@@ -82,6 +82,7 @@ class Options
         $this->testsuite = $opts['testsuite'];
         $this->maxBatchSize = $opts['max-batch-size'];
         $this->filter = $opts['filter'];
+        $this->chunk = $opts['chunk'];
 
         // we need to register that options if they are blank but do not get them as
         // key with null value in $this->filtered as it will create problems for
@@ -133,7 +134,8 @@ class Options
             'colors' => false,
             'testsuite' => '',
             'max-batch-size' => 0,
-            'filter' => null
+            'filter' => null,
+            'chunk' => null,
         );
     }
 
@@ -196,7 +198,8 @@ class Options
             'colors' => $this->colors,
             'testsuite' => $this->testsuite,
             'max-batch-size' => $this->maxBatchSize,
-            'filter' => $this->filter
+            'filter' => $this->filter,
+            'chunk' => $this->chunk,
         ));
         if ($configuration = $this->getConfigurationPath($filtered)) {
             $filtered['configuration'] = new Configuration($configuration);
